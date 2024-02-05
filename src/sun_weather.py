@@ -1,6 +1,6 @@
 from messages.current_msgs import special_message
 from messages.average_msgs import daily_message
-from api_rqst import temperature_request
+from meteorequest import temperature_request
 
 
 
