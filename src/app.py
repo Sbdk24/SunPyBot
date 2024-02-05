@@ -10,10 +10,6 @@ response_tracker = UserResponses("None", False)
 user_location = CalcWeather(latitude=0.0, longitude=0.0)
 
 
-def main():
-    bot.infinity_polling()
-
-
 """SunPy will start running when the user activates the chat"""
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
@@ -93,6 +89,13 @@ def location_already_obtained(message):
     # Print internally success of program
     print("succeed")
 
+@bot.message_handler(commands=["location"])
+def change_location(message):
+    response_tracker.command_type = "location"
+    message_sent = location_message(message)
+    # Go now to obtain location to start weather calculation
+    bot.register_next_step_handler(message_sent, obtain_location)
+
 
 def location_message(message):
     message_sent = bot.send_message(message.chat.id, "Please, share your " +
@@ -135,6 +138,9 @@ def obtain_location(message):
         # Now we can be sure his location is now saved
         response_tracker.location_obtained = True
         user_location.latitude, user_location.longitude = instant_location.latitude, instant_location.longitude
+        if response_tracker.command_type == "location":
+            return
+        
         answer = generate_response(user_location.latitude, user_location.longitude,
                                response_tracker.command_type)
         
@@ -156,5 +162,4 @@ def echo_all(message):
     bot.reply_to(message, message.text)
 
 
-if __name__ == "__main__":
-    main()
+bot.infinity_polling()

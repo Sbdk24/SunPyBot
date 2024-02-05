@@ -3,7 +3,7 @@ import random
 
 # These ranges are fully switchable if you'd like to change them organized by name
 temp_ranges =  {"super_hot": (30, float('inf')), 
-                "hot": (27, 30), "average": (20, 27),
+                "hot": (26, 30), "average": (20, 26),
                "kinda_cold": (13, 20), "is_colder": (9, 13),
                "really_cold": (5, 13), "insufferable": (0, 5), 
                "ice": (-float('inf'), 0)
