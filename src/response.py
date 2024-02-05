@@ -1,22 +1,22 @@
-from sun_weather import CalcWeather
+from calculations import CalcWeather
 
 
 def generate_response(latitude: float, longitude: float, return_type: str) -> str:
     # By this object we'll pass the response that user is expecting
     # Whether current or average news about weather
     tracker = CalcWeather(latitude, longitude)
-
-    "If user writes 'clima', generate that reponse, in other case, return daily news instead"
-    return tracker.calc_current_reponse() if return_type == "clima" else tracker.calc_daily_reponse()
+    if return_type == "sticker":
+        return tracker.calc_instant_sticker()
+    "If user writes 'weather', generate that reponse, in other case, return daily news instead"
+    return tracker.calc_current_reponse() if return_type == "weather" else tracker.calc_hourly_reponse()
 
 """ 
-This class tracks both command type user is currently using
-And checks if location was already passed, just for not being
-annoying asking for user's location everytime it's used
+This class tracks both command type user is currently using And checks if location was already passed, just for not being
+annoying asking for user's location everytime it's used.
 """
 
 class UserResponses:
-    def __init__(self, command_type: str, location_obtained: bool):
+    def __init__(self, command_type: str, location_obtained: (bool)):
         self._command_type, self._location_obtained = command_type, location_obtained
     
     @property
@@ -40,5 +40,5 @@ class UserResponses:
 
 
 def accepted_types():
-    return ["clima", "pronostico"]
+    return ["weather", "forecast", "sticker"]
 
