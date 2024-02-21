@@ -1,6 +1,6 @@
 # SunPyBot
 ## Video Demo
-[Watch the video demo](https://youtu.be/uQHkmh37ECQ)
+[Check out the bot working!](https://youtu.be/uQHkmh37ECQ)
 
 ## Description
 This is a Telegram bot that talks to you about the weather in some creative ways. You'll be able to check the temperature of any location in your own chat. Not only that, you'll also be able to get a forecast for the next 8 hours or check the weather's time with a related sticker.
