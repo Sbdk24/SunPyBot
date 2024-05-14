@@ -1,6 +1,6 @@
 .env
 que_putas.py
-__pychache__
+*/__pychache__/
 .DS_Store
-.vscode
-venv
+.vscode/
+venv/
