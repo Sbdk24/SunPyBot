@@ -1,7 +1,7 @@
 from messages import special_message_current
 from messages import special_message_hourly
 from messages import stickers_list
-from meteorequest import temperature_request
+from api_rqst.meteorequest import temperature_request
 
 class CalcWeather:
     # In this class it's only needed lat and lon for calcs

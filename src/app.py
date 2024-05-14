@@ -1,43 +1,39 @@
 import telebot
+from components.response import generate_response, UserResponses
+from components.calculations import CalcWeather
 from decouple import config
-from response import generate_response, UserResponses
-from calculations import CalcWeather
+from components.handler import whispers
 
-
-# To activate your bot you may get your own token from BotFather telegram API
+# To activate your bot you may get your own token from BotFather telegramp API
 bot = telebot.TeleBot(config("BOT_TOKEN"), parse_mode=None)
+
+whispers(bot)
+
 response_tracker = UserResponses("None", False)
 user_location = CalcWeather(latitude=0.0, longitude=0.0)
 
 
-"""SunPy will start running when the user activates the chat"""
+# SunPy will start running when the user activates the chat
+
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
     # Obtain chat id using message hidden attributes
     chat_id = message.chat.id
 
     # Chat messages displayed at the beginning of the conversation
-    bot.send_message(chat_id, "Hello, I am SunPy 🌞")
+    bot.send_message(chat_id, "Hey, I am SunPy 🌞")
 
-    bot.send_message(chat_id, "I know everything you need about the weather," +
-                      " when there's sun, when I'm not too lazy 😴")
-
-    bot.send_message(chat_id, "Type /weather to check how's the" +
-                     " weather going right now")
-
-    bot.send_message(chat_id, "Type /forecast if you want a " +
-                    "forecast for the next 8 hours")
-    
-    bot.send_message(chat_id, "Type /sticker if you'd like to check " +
-                    "the current weather with a sticker!")
+    bot.send_message(chat_id, "If you're new, check out my functionalities below at the menu.")
 
 
-"""Weather update and notification"""
+# Weather update and notification
+
+
 @bot.message_handler(commands=["weather"])
 def instant_weather(message):
     # Passing by reference type of response for the user and use it in obtain location function
     response_tracker.command_type = "weather"
-    
+
     if response_tracker.location_obtained:
         location_already_obtained(message)
         return
@@ -48,6 +44,8 @@ def instant_weather(message):
 
 
 """Weather Forecast update and notification"""
+
+
 @bot.message_handler(commands=["forecast"])
 def daily_weather(message):
     # Passing by reference type of response for the user and use it in obtain location function
@@ -78,7 +76,7 @@ def sticker_like(message):
 def location_already_obtained(message):
     answer = generate_response(user_location.latitude, user_location.longitude,
                                response_tracker.command_type)
-    
+
     # When user is asking fore sticker, we need a different command
     if response_tracker.command_type == "sticker":
         bot.send_sticker(message.chat.id, answer)
@@ -88,6 +86,7 @@ def location_already_obtained(message):
     bot.send_message(message.chat.id, answer)
     # Print internally success of program
     print("succeed")
+
 
 @bot.message_handler(commands=["location"])
 def change_location(message):
@@ -99,8 +98,8 @@ def change_location(message):
 
 def location_message(message):
     message_sent = bot.send_message(message.chat.id, "Please, share your " +
-                                     "location using the Telegram button :) " + 
-                                     "(it can also be in real time if you wish)")
+                                    "location using the Telegram button :) " +
+                                    "(it can also be in real time if you wish)")
     return message_sent
 
 
@@ -110,7 +109,7 @@ def obtain_location(message):
 
         # If successful, print location on the terminal window
         print(instant_location.latitude, "=", type(instant_location.latitude),
-               instant_location.longitude, "=", type(instant_location.longitude))
+              instant_location.longitude, "=", type(instant_location.longitude))
 
         # If not, tell the user to share the value we're expecting to get
         if not isinstance(instant_location, telebot.types.Location):
@@ -140,16 +139,15 @@ def obtain_location(message):
         user_location.latitude, user_location.longitude = instant_location.latitude, instant_location.longitude
         if response_tracker.command_type == "location":
             return
-        
+
         answer = generate_response(user_location.latitude, user_location.longitude,
-                               response_tracker.command_type)
-        
+                                   response_tracker.command_type)
 
         # When user is asking fore sticker, we need a different command
         if response_tracker.command_type == "sticker":
             bot.send_sticker(message.chat.id, answer)
             return
-        
+
         # After response is obtained, send it as an answer via telegram chat
         bot.send_message(message.chat.id, answer)
         # Print internally success of program
@@ -157,6 +155,8 @@ def obtain_location(message):
 
 
 """When the user prompts something unexpected, just copy and paste"""
+
+
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
     bot.reply_to(message, message.text)

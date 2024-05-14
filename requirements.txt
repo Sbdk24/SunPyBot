@@ -1,0 +1,5 @@
+pyTelegramBotAPI==4.17.0
+pymeteosource==1.7.0
+python-dotenv
+python-decouple==3.8
+requests==2.31.0
