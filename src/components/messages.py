@@ -90,4 +90,3 @@ def find_your_message(messages_by_range, temperature):
             if isinstance(message, list):
                 return random.choice(message)
             return message
-
